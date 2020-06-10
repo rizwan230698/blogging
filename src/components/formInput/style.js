@@ -6,7 +6,7 @@ export const Container = styled.div`
   width: 300px;
 
   &:first-child {
-    margin-top: 20px;
+    margin-top: 15px;
   }
 `;
 

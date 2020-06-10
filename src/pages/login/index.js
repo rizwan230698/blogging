@@ -1,36 +1,69 @@
 import React, { useState } from 'react';
-import { Tabs } from 'antd';
+import { Tabs, message } from 'antd';
+import { useMutation } from '@apollo/react-hooks';
 
 import { Container, GlobalStyles } from './style';
 import Card from '../../components/card';
 import FormInput from '../../components/formInput';
 import Button from '../../components/button';
+import { useForm } from '../../hooks/useForm';
+import { SIGN_UP, LOG_IN } from '../../graphql/mutation/user';
+import { showError, validateAuthForm } from '../../utils';
 
 const { TabPane } = Tabs;
 
 const Login = () => {
-  const [formData, setFormData] = useState({});
+  const [formData, handleInput, handleSubmit, resetForm] = useForm(
+    handleLoginSignup,
+    {}
+  );
   const [activeKey, setActiveKey] = useState('1');
+  const [signup, { loading: signingUp }] = useMutation(SIGN_UP, {
+    update(_, result) {
+      console.log(result);
+      resetForm();
+    },
+    onError(error) {
+      showError(error);
+    },
+    variables: {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    },
+  });
+  const [login, { loading: loggingIn }] = useMutation(LOG_IN, {
+    update(_, result) {
+      console.log(result);
+      resetForm();
+    },
+    onError(error) {
+      showError(error);
+    },
+    variables: {
+      email: formData.email,
+      password: formData.password,
+    },
+  });
 
   const handleTabs = (key) => {
     setActiveKey(key);
-    setFormData({});
+    resetForm();
   };
 
-  const handleInput = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = () => {
-    console.log(formData);
-  };
+  function handleLoginSignup(formType) {
+    const error = validateAuthForm(formType, formData);
+    if (error) {
+      return message.error(error);
+    }
+    formType === 'Signup' ? signup() : login();
+  }
 
   const renderForm = (formtype) => {
     const { name, email, password, confirmPassword } = formData;
     return (
       <>
-        {formtype === 'Sign up' && (
+        {formtype === 'Signup' && (
           <FormInput
             name="name"
             type="text"
@@ -53,7 +86,7 @@ const Login = () => {
           value={password}
           onChange={handleInput}
         />
-        {formtype === 'Sign up' && (
+        {formtype === 'Signup' && (
           <FormInput
             name="confirmPassword"
             type="password"
@@ -62,7 +95,12 @@ const Login = () => {
             onChange={handleInput}
           />
         )}
-        <Button onClick={handleSubmit}>{formtype}</Button>
+        <Button
+          loading={formtype === 'Signup' ? signingUp : loggingIn}
+          onClick={handleSubmit.bind(this, formtype)}
+        >
+          {formtype}
+        </Button>
       </>
     );
   };
@@ -70,13 +108,13 @@ const Login = () => {
   return (
     <Container>
       <GlobalStyles />
-      <Card>
+      <Card shadow="lg" translate="none">
         <Tabs activeKey={activeKey} size="large" onChange={handleTabs}>
-          <TabPane tab="Sign in" key="1">
-            {renderForm('Sign in')}
+          <TabPane tab="Login" key="1">
+            {renderForm('Login')}
           </TabPane>
-          <TabPane tab="Sign up" key="2">
-            {renderForm('Sign up')}
+          <TabPane tab="Signup" key="2">
+            {renderForm('Signup')}
           </TabPane>
         </Tabs>
       </Card>
