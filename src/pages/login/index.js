@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Tabs, message } from 'antd';
 import { useMutation } from '@apollo/react-hooks';
 
@@ -9,10 +9,12 @@ import Button from '../../components/button';
 import { useForm } from '../../hooks/useForm';
 import { SIGN_UP, LOG_IN } from '../../graphql/mutation/user';
 import { showError, validateAuthForm } from '../../utils';
+import { AuthContext } from '../../context/AuthContext';
 
 const { TabPane } = Tabs;
 
 const Login = () => {
+  const { login: setCurrentUser } = useContext(AuthContext);
   const [formData, handleInput, handleSubmit, resetForm] = useForm(
     handleLoginSignup,
     {}
@@ -20,8 +22,7 @@ const Login = () => {
   const [activeKey, setActiveKey] = useState('1');
   const [signup, { loading: signingUp }] = useMutation(SIGN_UP, {
     update(_, result) {
-      console.log(result);
-      resetForm();
+      setCurrentUser(result.data.createUser);
     },
     onError(error) {
       showError(error);
@@ -34,8 +35,7 @@ const Login = () => {
   });
   const [login, { loading: loggingIn }] = useMutation(LOG_IN, {
     update(_, result) {
-      console.log(result);
-      resetForm();
+      setCurrentUser(result.data.login);
     },
     onError(error) {
       showError(error);
@@ -46,8 +46,14 @@ const Login = () => {
     },
   });
 
+  useEffect(() => {
+    //clear form data on unmount
+    return resetForm;
+  }, [resetForm]);
+
   const handleTabs = (key) => {
     setActiveKey(key);
+    //clear form data on tab switch
     resetForm();
   };
 

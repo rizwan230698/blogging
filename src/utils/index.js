@@ -34,3 +34,5 @@ export const validateAuthForm = (formType, formValues) => {
     }
   }
 };
+
+export const soryByRecent = (a, b) => (a.updatedAt > b.updatedAt ? -1 : 1);
