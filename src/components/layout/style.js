@@ -26,6 +26,7 @@ export const OptionLink = styled(Link)`
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.5px;
+  cursor: pointer;
 
   &:hover,
   &:active {
