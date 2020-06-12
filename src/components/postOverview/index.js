@@ -14,7 +14,7 @@ const PostOverview = ({ id, title, body, updatedAt, author: { name } }) => (
       <Detail>
         <Avatar size="small">{name[0].toUpperCase()}</Avatar>
         <span>{name}</span>
-        <span>{moment(updatedAt).fromNow(true)}</span>
+        <span>{moment(updatedAt).fromNow()}</span>
       </Detail>
       <Body>{shortBody(body)}</Body>
     </Card>
