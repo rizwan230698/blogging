@@ -11,6 +11,7 @@ export const SUBSCRIBE_POSTS = gql`
         published
         updatedAt
         author {
+          id
           name
         }
       }
