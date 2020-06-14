@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Divider } from 'antd';
 import media from '../../components/media';
 
 export const Container = styled.div`
@@ -149,15 +148,10 @@ export const Comments = styled.div`
   margin-top: 10px;
   border-top: 1px solid rgba(128, 128, 128, 0.4);
   border-bottom: 1px solid rgba(128, 128, 128, 0.4);
-  padding: 15px 0px;
+  padding: 15px 0px 0px;
   max-height: 400px;
   min-height: 260px;
   overflow: auto;
-  display: flex;
-  flex-direction: column;
-`;
-
-export const Comment = styled.div`
   display: flex;
   flex-direction: column;
 `;
@@ -167,8 +161,4 @@ export const EmptyContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-export const DividerX = styled(Divider)`
-  margin: 8px 0;
 `;

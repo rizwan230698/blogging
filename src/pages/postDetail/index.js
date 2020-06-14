@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Empty } from 'antd';
+import { Avatar, Empty, message } from 'antd';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
@@ -9,6 +9,8 @@ import { GET_POST } from '../../graphql/query/post';
 import { SUBSCRIBE_COMMENTS } from '../../graphql/subscription/comment';
 import { updatePostCache } from '../../utils/cache';
 import { soryByRecent } from '../../utils/index';
+import Comment from '../../components/comment';
+import CommentForm from '../../components/commentForm';
 import {
   Container,
   Main,
@@ -19,9 +21,7 @@ import {
   Sidebar,
   CommentBox,
   Comments,
-  Comment,
   EmptyContainer,
-  DividerX,
 } from './style';
 
 const PostDetail = (props) => {
@@ -49,6 +49,9 @@ const PostDetail = (props) => {
           },
           data: updatedCache,
         });
+
+      subscriptionData.data.comment.mutation === 'DELETED' &&
+        message.success('Comment deleted successfully!');
     },
     variables: {
       postId,
@@ -58,9 +61,10 @@ const PostDetail = (props) => {
   if (loading) {
     return <Spinner />;
   }
-
+  const commentsContainerRef = React.createRef();
   const {
     post: {
+      id,
       title,
       body,
       updatedAt,
@@ -84,17 +88,10 @@ const PostDetail = (props) => {
         <Content>{body}</Content>
         <CommentBox>
           <Title md>Comments Section</Title>
-          <Comments>
+          <Comments ref={commentsContainerRef}>
             {comments.length ? (
               comments.map((comment) => (
-                <Comment key={comment.id}>
-                  <Title xs>
-                    {comment.author.name}
-                    <span>{moment(comment.updatedAt).fromNow()}</span>
-                  </Title>
-                  <Content sm>{comment.text}</Content>
-                  <DividerX />
-                </Comment>
+                <Comment key={comment.id} {...comment} />
               ))
             ) : (
               <EmptyContainer>
@@ -102,6 +99,10 @@ const PostDetail = (props) => {
               </EmptyContainer>
             )}
           </Comments>
+          <CommentForm
+            postId={id}
+            commentsContainerRef={commentsContainerRef}
+          />
         </CommentBox>
       </Main>
       <Sidebar>
