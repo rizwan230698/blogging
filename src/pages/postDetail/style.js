@@ -141,16 +141,15 @@ export const CommentBox = styled.div`
 
   ${media.tablet`
     margin-top: 30px;
-    max-width: 600px;
+    max-width: unset;
     `}
 `;
 
 export const Comments = styled.div`
-  margin-top: 20px;
-  // background-color: #fff;
-  border-radius: 4px;
-  // padding: 15px 20px;
-  padding: 0;
+  margin-top: 10px;
+  border-top: 1px solid rgba(128, 128, 128, 0.4);
+  border-bottom: 1px solid rgba(128, 128, 128, 0.4);
+  padding: 15px 0px;
   max-height: 400px;
   min-height: 260px;
   overflow: auto;
