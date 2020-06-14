@@ -1,7 +1,129 @@
 import React from 'react';
+import { Avatar, Empty } from 'antd';
+import { useQuery, useSubscription } from '@apollo/react-hooks';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
 
-const PostDetail = () => {
-  return <div>PostDetail</div>;
+import Spinner from '../../components/spinner';
+import { GET_POST } from '../../graphql/query/post';
+import { SUBSCRIBE_COMMENTS } from '../../graphql/subscription/comment';
+import { updatePostCache } from '../../utils/cache';
+import { soryByRecent } from '../../utils/index';
+import {
+  Container,
+  Main,
+  Header,
+  Title,
+  SubTitle,
+  Content,
+  Sidebar,
+  CommentBox,
+  Comments,
+  Comment,
+  EmptyContainer,
+  DividerX,
+} from './style';
+
+const PostDetail = (props) => {
+  const postId = props.match.params.id;
+  const { data, loading, refetch } = useQuery(GET_POST, {
+    variables: {
+      id: postId,
+    },
+  });
+
+  useSubscription(SUBSCRIBE_COMMENTS, {
+    onSubscriptionData({ client, subscriptionData }) {
+      const updatedCache = updatePostCache(
+        client,
+        subscriptionData,
+        refetch,
+        postId
+      );
+
+      updatedCache &&
+        client.writeQuery({
+          query: GET_POST,
+          variables: {
+            id: postId,
+          },
+          data: updatedCache,
+        });
+    },
+    variables: {
+      postId,
+    },
+  });
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  const {
+    post: {
+      title,
+      body,
+      updatedAt,
+      comments,
+      author: { name, posts },
+    },
+  } = data;
+  return (
+    <Container>
+      <Main>
+        <Header>
+          <Title>{title}</Title>
+          <SubTitle>
+            <span>
+              <Avatar size="small">{name[0].toUpperCase()}</Avatar>
+            </span>
+            <span>{name}</span>
+            <span>{moment(updatedAt).format('MMMM Do YYYY')}</span>
+          </SubTitle>
+        </Header>
+        <Content>{body}</Content>
+        <CommentBox>
+          <Title md>Comments Section</Title>
+          <Comments>
+            {comments.length ? (
+              comments.map((comment) => (
+                <Comment key={comment.id}>
+                  <Title xs>
+                    {comment.author.name}
+                    <span>{moment(comment.updatedAt).fromNow()}</span>
+                  </Title>
+                  <Content sm>{comment.text}</Content>
+                  <DividerX />
+                </Comment>
+              ))
+            ) : (
+              <EmptyContainer>
+                <Empty description="Be the first one to comment." />
+              </EmptyContainer>
+            )}
+          </Comments>
+        </CommentBox>
+      </Main>
+      <Sidebar>
+        <Title md>More blogs by {name}</Title>
+        <div>
+          {Array.from(posts)
+            .sort(soryByRecent)
+            .filter((item, index) => index < 5 && item.title !== title)
+            .map((item) => (
+              <Link to={`/posts/${item.id}`} key={item.id}>
+                <div>
+                  <Title sm white>
+                    {item.title}
+                  </Title>
+                  <span>{moment(item.updatedAt).fromNow()}</span>
+                </div>
+              </Link>
+            ))}
+        </div>
+      </Sidebar>
+    </Container>
+  );
 };
 
 export default PostDetail;
