@@ -1,7 +1,7 @@
 import styled, { createGlobalStyle } from 'styled-components';
 
 export const SpinContainer = styled.div`
-  height: calc(100vh - 154px);
+  height: calc(100vh - 182px);
   display: flex;
   align-items: center;
   justify-content: center;
