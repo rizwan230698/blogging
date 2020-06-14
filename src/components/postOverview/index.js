@@ -9,7 +9,7 @@ import { shortBody } from '../../utils';
 
 const PostOverview = ({ id, title, body, updatedAt, author: { name } }) => (
   <Link to={`/posts/${id}`}>
-    <Card style={{ cursor: 'pointer', minHeight: 200 }}>
+    <Card style={{ cursor: 'pointer', height: '100%' }}>
       <Title>{title}</Title>
       <Detail>
         <Avatar size="small">{name[0].toUpperCase()}</Avatar>

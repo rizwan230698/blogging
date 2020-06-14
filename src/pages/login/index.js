@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Tabs, message } from 'antd';
 import { useMutation } from '@apollo/react-hooks';
 
@@ -45,11 +45,6 @@ const Login = () => {
       password: formData.password,
     },
   });
-
-  useEffect(() => {
-    //clear form data on unmount
-    return resetForm;
-  }, [resetForm]);
 
   const handleTabs = (key) => {
     setActiveKey(key);

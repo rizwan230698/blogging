@@ -2,10 +2,8 @@ import React, { useContext } from 'react';
 import { Layout as AntdLayout } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { HeaderX, Logo, OptionLink, ContentX } from './style';
+import { HeaderX, Logo, OptionLink, ContentX, FooterX } from './style';
 import { AuthContext } from '../../context/AuthContext';
-
-const { Footer } = AntdLayout;
 
 const Layout = ({ children }) => {
   const { token, logout } = useContext(AuthContext);
@@ -23,10 +21,8 @@ const Layout = ({ children }) => {
           </OptionLink>
         )}
       </HeaderX>
-      <ContentX style={{ padding: '10px 50px' }}>{children}</ContentX>
-      <Footer style={{ textAlign: 'center' }}>
-        Blog App ©2020 Created by Rizwan Anwar
-      </Footer>
+      <ContentX>{children}</ContentX>
+      <FooterX>Blog App ©2020 Created by Rizwan Anwar</FooterX>
     </AntdLayout>
   );
 };

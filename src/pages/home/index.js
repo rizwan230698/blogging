@@ -41,14 +41,15 @@ const Home = () => {
   return (
     <>
       <Heading>Recent Blogs</Heading>
-      <Row gutter={[16, 16]}>
-        {Array.from(postsData.posts)
-          .sort(soryByRecent)
-          .map(({ id, ...otherProps }) => (
-            <Col key={id} lg={12} md={12} sm={24} xs={24}>
-              <PostOverview id={id} {...otherProps} />
-            </Col>
-          ))}
+      <Row gutter={[16, 16]} type="flex">
+        {postsData &&
+          Array.from(postsData.posts)
+            .sort(soryByRecent)
+            .map(({ id, ...otherProps }) => (
+              <Col key={id} lg={8} md={12} sm={24} xs={24}>
+                <PostOverview id={id} {...otherProps} />
+              </Col>
+            ))}
       </Row>
     </>
   );

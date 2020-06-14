@@ -1,9 +1,14 @@
 import styled from 'styled-components';
+import media from '../media';
 
 export const Container = styled.div`
   position: relative;
   margin: 0 0 25px 0;
   width: 300px;
+
+  ${media.mobile`
+    width: unset;
+    `}
 
   &:first-child {
     margin-top: 15px;
