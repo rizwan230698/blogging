@@ -13,8 +13,9 @@ export const shortBody = (body) => {
   return `${newBody.trim()}...`;
 };
 
-export const showError = (error) =>
-  error.message.split(':')[1].trim().toLowerCase().includes('unique')
+export const showError = (error,customError) =>
+customError ? message.error(customError)
+  : error.message.split(':')[1].trim().toLowerCase().includes('unique')
     ? message.error('This email is already taken.')
     : message.error(error.message.split(':')[1].trim());
 
