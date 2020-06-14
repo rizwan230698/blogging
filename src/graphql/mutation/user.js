@@ -7,23 +7,19 @@ export const SIGN_UP = gql`
       user {
         id
         name
-        email
-        createdAt
       }
     }
   }
 `;
 
 export const LOG_IN = gql`
-mutation login($email: String!, $password:String!){
-  login(data:{email:$email,password:$password}){
-    token
-    user{
-      id
-      name
-      email
-      createdAt 
+  mutation login($email: String!, $password: String!) {
+    login(data: { email: $email, password: $password }) {
+      token
+      user {
+        id
+        name
+      }
     }
   }
-}
 `;
