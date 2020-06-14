@@ -34,9 +34,11 @@ const link = split(
 );
 
 const setAuthorizationLink = setContext((request, previousContext) => {
-  const token = localStorage.getItem('token');
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   return {
-    headers: { Authorization: token ? `Bearer ${token}` : '' },
+    headers: {
+      Authorization: currentUser ? `Bearer ${currentUser.token}` : '',
+    },
   };
 });
 

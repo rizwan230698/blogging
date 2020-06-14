@@ -1,18 +1,19 @@
 import React, { useReducer } from 'react';
 import jwtDecode from 'jwt-decode';
 
-const getTokken = () => {
-  if (localStorage.getItem('token')) {
-    const token = localStorage.getItem('token');
+const getInitailState = () => {
+  if (localStorage.getItem('currentUser')) {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const token = currentUser.token;
     const decodedToken = jwtDecode(token);
     if (decodedToken.exp * 1000 < Date.now()) {
-      localStorage.removeItem('token');
-      return '';
+      localStorage.removeItem('currentUser');
+      return {};
     } else {
-      return token;
+      return currentUser;
     }
   } else {
-    return '';
+    return {};
   }
 };
 
@@ -41,21 +42,18 @@ const AuthReducer = (state, action) => {
   }
 };
 
-const initialState = {
-  user: null,
-  token: getTokken(),
-};
+const initialState = getInitailState();
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
   const login = (userData) => {
-    localStorage.setItem('token', userData.token);
+    localStorage.setItem('currentUser', JSON.stringify(userData));
     dispatch({ type: 'LOGIN', payload: userData });
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('currentUser');
     dispatch({ type: 'LOGOUT' });
   };
 
