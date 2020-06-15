@@ -80,6 +80,7 @@ export const Content = styled.p`
   font-size: ${({ sm }) => (sm ? '16px' : '18px')};
   margin-bottom: 0px;
   margin-top: ${({ mt }) => mt && mt};
+  white-space: break-spaces;
 `;
 
 export const Sidebar = styled.div`
