@@ -6,6 +6,7 @@ import Button from '../button';
 import { FormContainer, InputX } from './style';
 import { useForm } from '../../hooks/useForm';
 import { CREATE_COMMENT } from '../../graphql/mutation/comment';
+import { showError } from '../../utils';
 
 const CommentForm = ({ postId, commentsContainerRef }) => {
   const [state, onChange, onSubmit, resetForm] = useForm(handleSubmit, {
@@ -18,7 +19,11 @@ const CommentForm = ({ postId, commentsContainerRef }) => {
     },
     onCompleted() {
       resetForm();
-      scrollToTop();
+      scrollToBottom();
+    },
+    onError(err) {
+      showError(err);
+      resetForm();
     },
   });
 
@@ -29,7 +34,7 @@ const CommentForm = ({ postId, commentsContainerRef }) => {
     }
   };
 
-  function scrollToTop() {
+  function scrollToBottom() {
     commentsContainerRef.current.scrollTo(
       100,
       commentsContainerRef.current.scrollHeight + 61

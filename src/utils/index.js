@@ -13,10 +13,13 @@ export const shortBody = (body) => {
   return `${newBody.trim()}...`;
 };
 
-export const showError = (error,customError) =>
-customError ? message.error(customError)
-  : error.message.split(':')[1].trim().toLowerCase().includes('unique')
+export const showError = (error, customError) =>
+  customError
+    ? message.error(customError)
+    : error.message.split(':')[1].trim().toLowerCase().includes('unique')
     ? message.error('This email is already taken.')
+    : error.message.split(':')[1].trim().toLowerCase().includes('find post')
+    ? message.error('Sorry, This post has been deleted.')
     : message.error(error.message.split(':')[1].trim());
 
 export const validateAuthForm = (formType, formValues) => {
