@@ -22,6 +22,12 @@ const CommentForm = ({ postId, commentsContainerRef }) => {
     },
   });
 
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      onSubmit();
+    }
+  };
+
   function scrollToTop() {
     commentsContainerRef.current.scrollTo(
       100,
@@ -44,6 +50,7 @@ const CommentForm = ({ postId, commentsContainerRef }) => {
         value={state.text}
         placeholder="Write a comment..."
         autoComplete="off"
+        onKeyDown={handleKeyDown}
       />
       <Button loading={loading} onClick={onSubmit}>
         Submit
