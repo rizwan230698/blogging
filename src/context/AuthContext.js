@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import jwtDecode from 'jwt-decode';
 
-const getInitailState = () => {
+const getInitialState = () => {
   if (localStorage.getItem('currentUser')) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const token = currentUser.token;
@@ -42,7 +42,7 @@ const AuthReducer = (state, action) => {
   }
 };
 
-const initialState = getInitailState();
+const initialState = getInitialState();
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
