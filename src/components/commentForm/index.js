@@ -24,6 +24,7 @@ const CommentForm = ({ postId, commentsContainerRef }) => {
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
+      e.target.blur();
       onSubmit();
     }
   };
