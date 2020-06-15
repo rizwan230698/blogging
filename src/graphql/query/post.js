@@ -23,6 +23,7 @@ export const GET_POST = gql`
       title
       body
       published
+      updatedAt
       comments {
         id
         text
