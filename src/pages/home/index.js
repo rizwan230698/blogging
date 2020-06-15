@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Row, Col, notification } from 'antd';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 
@@ -9,8 +9,12 @@ import { GET_POSTS } from '../../graphql/query/post';
 import { SUBSCRIBE_POSTS } from '../../graphql/subscription/post';
 import { updatePostsCache } from '../../utils/cache';
 import { soryByRecent } from '../../utils';
+import PlusButton from '../../components/plusButton';
+import BlogForm from '../../components/blogForm';
+import { AuthContext } from '../../context/AuthContext';
 
 const Home = () => {
+  const { user: currentUser } = useContext(AuthContext);
   const { loading: loadingPosts, data: postsData, refetch } = useQuery(
     GET_POSTS
   );
@@ -26,6 +30,7 @@ const Home = () => {
         },
       } = subscriptionData;
       mutation === 'CREATED' &&
+        currentUser.id !== node.author.id &&
         notification.info({
           message: 'New Blog Post',
           description: `${node.title} By ${node.author.name}`,
@@ -33,6 +38,15 @@ const Home = () => {
         });
     },
   });
+
+  const [showModal, setShowModal] = useState(false);
+
+  const handleClose = () => {
+    setShowModal(false);
+  };
+  const handleOpen = () => {
+    setShowModal(true);
+  };
 
   if (loadingPosts) {
     return <Spinner />;
@@ -51,6 +65,8 @@ const Home = () => {
               </Col>
             ))}
       </Row>
+      <BlogForm visible={showModal} handleCancel={handleClose} />
+      <PlusButton handleOpen={handleOpen} />
     </>
   );
 };
