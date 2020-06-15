@@ -20,7 +20,6 @@ export const updatePostCache = (client, subscriptionData, refetch, id) => {
       id,
     },
   });
-  console.log(cache, subscriptionData);
   switch (subscriptionData.data.comment.mutation) {
     case 'CREATED':
       return {
