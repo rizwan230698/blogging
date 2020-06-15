@@ -36,7 +36,9 @@ const CommentComponent = ({ id, text, updatedAt, author }) => {
           )}
         </Tooltip>
       </Title>
-      <Content sm>{text}</Content>
+      <Content sm mt="-10px">
+        {text}
+      </Content>
       <DividerX />
     </Comment>
   );

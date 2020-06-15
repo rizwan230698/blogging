@@ -79,6 +79,7 @@ export const SubTitle = styled.h3`
 export const Content = styled.p`
   font-size: ${({ sm }) => (sm ? '16px' : '18px')};
   margin-bottom: 0px;
+  margin-top: ${({ mt }) => mt && mt};
 `;
 
 export const Sidebar = styled.div`
